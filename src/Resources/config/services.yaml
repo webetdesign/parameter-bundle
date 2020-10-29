@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  WebEtDesign\ParameterBundle\:
+    resource: '../../*'
+    exclude: '../../{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+  webetdesign.parameter:
+    class: WebEtDesign\ParameterBundle\Service\ParameterService
+    public: true
+
+  WebEtDesign\ParameterBundle\Service\ParameterService:
+    bind:
+      $parametersType: '%parameter.types%'

@@ -1,0 +1,46 @@
+{% block parameters_text_widget %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block parameters_textarea_widget %}
+    {{ block('textarea_widget') }}
+{% endblock %}
+
+{% block parameters_number_widget %}
+    {{ form_widget(form, {type: 'number'}) }}
+{% endblock %}
+
+{% block parameters_list_value_row %}
+    <div class="row">
+        <div class="col-xs-1">
+            <a type="button" class="btn btn-link parameter-collection-delete">
+                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="col-xs-11">
+            <input class="parameter-list-value" type="text" aria-label="" value="{{ value }}">
+        </div>
+    </div>
+{% endblock %}
+
+{% block parameters_list_widget %}
+    {% set values = form.vars.value|split(';') %}
+    {% set value = '' %}
+    <div class="parameter-collection">
+        <template>
+            {{ block('parameters_list_value_row') }}
+        </template>
+        <div class="parameter-collection-row">
+            {% for value in values %}
+                {{ block('parameters_list_value_row') }}
+            {% endfor %}
+        </div>
+        <div>
+            <a type="button" class="btn btn-link parameter-collection-add">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        {{ form_widget(form, {type: 'hidden', attr: {class: 'parameter-value'}}) }}
+    </div>
+{% endblock %}

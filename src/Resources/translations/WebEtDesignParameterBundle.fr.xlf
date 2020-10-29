@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="fr" trgLang="fr">
+  <file id="WebEtDesignParameterBundle.fr">
+    <unit id="NA9GMDP" name="Code">
+      <segment>
+        <source>Code</source>
+        <target>Code</target>
+      </segment>
+    </unit>
+    <unit id="uq3fcPt" name="Type">
+      <segment>
+        <source>Type</source>
+        <target>Type</target>
+      </segment>
+    </unit>
+    <unit id="DmY3P0X" name="Label">
+      <segment>
+        <source>Label</source>
+        <target>Libellé</target>
+      </segment>
+    </unit>
+    <unit id="jjeVPSP" name="Value">
+      <segment>
+        <source>Value</source>
+        <target>Valeur</target>
+      </segment>
+    </unit>
+    <unit id="yQKnBTh" name="Parameter List">
+      <segment>
+        <source>Parameter List</source>
+        <target>Liste des paramètres</target>
+      </segment>
+    </unit>
+    <unit id="ZM.xMZ0" name="Action">
+      <segment>
+        <source>Action</source>
+        <target>Action</target>
+      </segment>
+    </unit>
+    <unit id="3QZuwb8" name="Parameter">
+      <segment>
+        <source>Parameter</source>
+        <target>Paramètre</target>
+      </segment>
+    </unit>
+    <unit id="3QZupb8" name="Deletable">
+      <segment>
+        <source>Deletable</source>
+        <target>Supprimable</target>
+      </segment>
+    </unit>
+    <unit id="3QZuaf8" name="Deletable">
+      <segment>
+        <source>Info</source>
+        <target>Information</target>
+      </segment>
+    </unit>
+    <unit id="3QZudv8" name="Deletable">
+      <segment>
+        <source>Configuration</source>
+        <target>Configuration</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

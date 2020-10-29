@@ -1,0 +1,10 @@
+services:
+  admin.parameters:
+    class: WebEtDesign\ParameterBundle\Admin\ParameterAdmin
+    arguments: [~, WebEtDesign\ParameterBundle\Entity\Parameter, ~]
+    tags:
+      - { name: sonata.admin, manager_type: orm, group: Admin, label: Parameter, icon: '<i class="fa fa-cogs"></i>' }
+    public: true
+    calls:
+      - [setTranslationDomain, ['WebEtDesignParameterBundle']]
+      - [setParameterService, ['@WebEtDesign\ParameterBundle\Service\ParameterService']]

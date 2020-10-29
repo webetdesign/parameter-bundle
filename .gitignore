@@ -1,0 +1,10 @@
+.DS_Store
+/vendor/
+/.idea/
+/.docker
+/docker-compose.yml
+/node_modules/
+/yarn.lock
+/yarn-error.log
+/.env
+/composer.lock
