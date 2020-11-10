@@ -11,7 +11,7 @@
 namespace WebEtDesign\ParameterBundle\Service;
 
 use WebEtDesign\ParameterBundle\Entity\Parameter;
-use WebEtDesign\ParameterBundle\Repository\ParameterRepository;
+use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
 
 class ParameterService
 {
@@ -19,13 +19,8 @@ class ParameterService
         'text'     => 'Texte',
         'textarea' => 'Zone de texte',
         'number'   => 'Nombre',
-        'list'     => [
-            'array' => true,
-            'type'  => 'Liste'
-        ],
+        'list'     => 'Liste',
     ];
-
-    protected ParameterRepository $repo;
 
     /**
      * Cached values of parameters
@@ -38,16 +33,18 @@ class ParameterService
 
     protected array $types = [];
 
+    private ParameterManagerInterface $manager;
+
     /**
      * ParameterService constructor.
      *
-     * @param ParameterRepository $repo
+     * @param ParameterManagerInterface $manager
      * @param array $parametersType
      */
-    public function __construct(ParameterRepository $repo, $parametersType = [])
+    public function __construct(ParameterManagerInterface $manager, $parametersType = [])
     {
-        $this->repo  = $repo;
-        $this->types = $this->initTypes($parametersType);
+        $this->manager = $manager;
+        $this->types   = $this->initTypes($parametersType);
     }
 
     private function initTypes($types)
@@ -84,7 +81,7 @@ class ParameterService
     public function getParameter($code)
     {
         if (!isset($this->parameters[$code])) {
-            $parameter = $this->repo->findCached($code);
+            $parameter = $this->manager->find($code);
 
             $this->parameters[$code] = $parameter ?: null;
         }
@@ -100,8 +97,12 @@ class ParameterService
      */
     public function getValue($code, $default = '')
     {
-        $parameter = $this->getParameter($code);
+        if (!isset($this->values[$code])) {
+            $parameter = $this->manager->find($code);
 
-        return $parameter ? $parameter->getValue() : $default;
+            $this->values[$code] = $parameter ? $parameter->getValue() : $default;
+        }
+
+        return $this->values[$code];
     }
 }

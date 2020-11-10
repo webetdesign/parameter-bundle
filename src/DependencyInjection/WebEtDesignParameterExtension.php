@@ -25,6 +25,7 @@ class WebEtDesignParameterExtension extends Extension
         $config        = $processor->processConfiguration($configuration, $configs);
 
         $container->setParameter('parameter.types', $config['types']);
+        $container->setParameter('parameter.fixtures', $config['fixtures']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
@@ -33,5 +34,7 @@ class WebEtDesignParameterExtension extends Extension
         if (isset($bundles['SonataAdminBundle'])) {
             $loader->load('admin.yaml');
         }
+
+        $loader->load('doctrine.yaml');
     }
 }

@@ -1,0 +1,3 @@
+services:
+  WebEtDesign\ParameterBundle\Model\ParameterManagerInterface:
+    alias: WebEtDesign\ParameterBundle\Doctrine\ParameterManager

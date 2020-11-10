@@ -14,3 +14,7 @@ services:
   WebEtDesign\ParameterBundle\Service\ParameterService:
     bind:
       $parametersType: '%parameter.types%'
+
+  WebEtDesign\ParameterBundle\Command\FixtureCommand:
+    bind:
+      $parameterFixtures: '%parameter.fixtures%'

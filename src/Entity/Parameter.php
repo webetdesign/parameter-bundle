@@ -5,7 +5,7 @@ namespace WebEtDesign\ParameterBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="WebEtDesign\ParameterBundle\Repository\ParameterRepository")
+ * @ORM\Entity(repositoryClass="WebEtDesign\ParameterBundle\Doctrine\ParameterRepository")
  * @ORM\Table(name="parameter")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="rarely_changes")
  */

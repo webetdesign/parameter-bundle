@@ -19,11 +19,27 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('web_et_design_parameter');
 
-        $treeBuilder->getRootNode()
+        $rootNode = $treeBuilder->getRootNode();
+
+        $rootNode
             ->children()
                 ->arrayNode('types')
-                ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
-                ->prototype('scalar')
+                    ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
+                    ->prototype('scalar')
+            ->end();
+
+        $rootNode
+            ->children()
+                ->arrayNode('fixtures')
+                    ->useAttributeAsKey('code')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('type')->defaultValue('text')->end()
+                            ->scalarNode('label')->end()
+                            ->scalarNode('default_value')->beforeNormalization()->ifArray()->then(function ($v) { return implode(';', $v); })->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

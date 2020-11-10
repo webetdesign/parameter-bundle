@@ -10,7 +10,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use WebEtDesign\ParameterBundle\Entity\Parameter;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterValueType;
@@ -46,10 +45,8 @@ final class ParameterAdmin extends AbstractAdmin
             ->addIdentifier('code')
             ->add('type')
             ->add('label')
-            ->add('value', TemplateRegistry::TYPE_HTML, [
-                'truncate' => [
-                    'length' => 100
-                ],
+            ->add('value', null, [
+                'template' => '@WebEtDesignParameter/Admin/list__value.html.twig',
             ])
             ->add('_action', null, [
                 'actions' => $actions,
