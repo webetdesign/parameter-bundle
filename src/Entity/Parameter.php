@@ -59,9 +59,11 @@ class Parameter
         return $this->code;
     }
 
-    public function setCode(string $code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
+
+        return $this;
     }
 
     public function getCode(): string

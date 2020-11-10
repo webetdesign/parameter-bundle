@@ -76,7 +76,7 @@ final class ParameterAdmin extends AbstractAdmin
             ->end();
 
         $subject = $this->getSubject();
-        if ($this->isCurrentRoute('edit') && $subject instanceof Parameter) {
+        if ($subject instanceof Parameter && $this->isCurrentRoute('edit')) {
             $formMapper
                 ->with('Configuration', ['class' => 'col-md-9'])
                 ->add('label')
@@ -102,14 +102,14 @@ final class ParameterAdmin extends AbstractAdmin
             ->add('value');
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection
             ->remove('export')
             ->remove('batch');
     }
 
-    public function getBatchActions()
+    public function getBatchActions(): array
     {
         $actions = parent::getBatchActions();
         unset($actions['delete']);
@@ -117,7 +117,7 @@ final class ParameterAdmin extends AbstractAdmin
         return $actions;
     }
 
-    public function setParameterManager(ParameterManagerInterface $parameterManager)
+    public function setParameterManager(ParameterManagerInterface $parameterManager): void
     {
         $this->parameterManager = $parameterManager;
     }

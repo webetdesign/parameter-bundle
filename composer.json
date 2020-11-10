@@ -23,9 +23,14 @@
     "symfony/validator": "^4.0"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "sonata-project/admin-bundle": "^3.79",
     "symfony/filesystem": "^4.0",
     "symfony/phpunit-bridge": "^4.0",
     "symfony/yaml": "^4.0"
+  },
+  "suggest": {
+    "sonata-project/admin-bundle": "Add parameter admin interface"
   },
   "config": {
     "sort-packages": true

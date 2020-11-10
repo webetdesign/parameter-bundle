@@ -10,7 +10,7 @@ class ParameterValueType extends AbstractType
 {
     private string $formType = 'text';
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $this->formType = $options['type'];
     }
@@ -18,7 +18,7 @@ class ParameterValueType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'compound' => false,
@@ -26,7 +26,7 @@ class ParameterValueType extends AbstractType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'parameters_' . $this->formType;
     }

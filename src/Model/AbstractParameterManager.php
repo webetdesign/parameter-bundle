@@ -6,7 +6,7 @@ use WebEtDesign\ParameterBundle\Entity\Parameter;
 
 abstract class AbstractParameterManager implements ParameterManagerInterface
 {
-    const DEFAULT_TYPE = [
+    public const DEFAULT_TYPE = [
         'text'     => 'Texte',
         'textarea' => 'Zone de texte',
         'number'   => 'Nombre',
@@ -20,7 +20,7 @@ abstract class AbstractParameterManager implements ParameterManagerInterface
         $this->types = $this->initTypes($parametersType);
     }
 
-    protected function initTypes($types)
+    protected function initTypes($types): array
     {
         $types = array_merge(self::DEFAULT_TYPE, $types);
 
@@ -39,12 +39,12 @@ abstract class AbstractParameterManager implements ParameterManagerInterface
         return $tmp;
     }
 
-    public function create($code = null)
+    public function create($code = null): Parameter
     {
         return new Parameter($code);
     }
 
-    public function getTypes()
+    public function getTypes(): array
     {
         return $this->types;
     }

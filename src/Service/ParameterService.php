@@ -8,6 +8,8 @@
  * @author Julien GRAEFFLY <julien@webetdesign.com>
  */
 
+declare(strict_types=1);
+
 namespace WebEtDesign\ParameterBundle\Service;
 
 use WebEtDesign\ParameterBundle\Entity\Parameter;
@@ -17,8 +19,6 @@ class ParameterService
 {
     /**
      * Cached values of parameters
-     *
-     * @var array
      */
     protected array $values = [];
 
@@ -26,21 +26,12 @@ class ParameterService
 
     private ParameterManagerInterface $manager;
 
-    /**
-     * ParameterService constructor.
-     *
-     * @param ParameterManagerInterface $manager
-     */
     public function __construct(ParameterManagerInterface $manager)
     {
         $this->manager = $manager;
     }
 
-    /**
-     * @param $code
-     * @return Parameter
-     */
-    public function getParameter($code)
+    public function getParameter(string $code): ?Parameter
     {
         if (!isset($this->parameters[$code])) {
             $parameter = $this->manager->find($code);
@@ -51,13 +42,7 @@ class ParameterService
         return $this->parameters[$code];
     }
 
-    /**
-     * @param $code
-     * @param string $default
-     *
-     * @return string
-     */
-    public function getValue($code, $default = '')
+    public function getValue(string $code, string $default = ''): string
     {
         if (!isset($this->values[$code])) {
             $parameter = $this->manager->find($code);

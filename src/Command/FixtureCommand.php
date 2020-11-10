@@ -22,7 +22,7 @@ class FixtureCommand extends Command
         $this->parameterFixtures = $parameterFixtures;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('parameter:fixture')
