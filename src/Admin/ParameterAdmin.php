@@ -13,11 +13,11 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use WebEtDesign\ParameterBundle\Entity\Parameter;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterValueType;
-use WebEtDesign\ParameterBundle\Service\ParameterService;
+use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
 
 final class ParameterAdmin extends AbstractAdmin
 {
-    protected ParameterService $parameterService;
+    protected ParameterManagerInterface $parameterManager;
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
@@ -69,7 +69,7 @@ final class ParameterAdmin extends AbstractAdmin
             ->add('type', ChoiceType::class, array_merge(
                 $options,
                 [
-                    'choices' => array_flip($this->parameterService->getTypes()),
+                    'choices' => array_flip($this->parameterManager->getTypes()),
                 ],
             ))
             ->add('deletable', null, $options)
@@ -117,8 +117,8 @@ final class ParameterAdmin extends AbstractAdmin
         return $actions;
     }
 
-    public function setParameterService(ParameterService $parameterService)
+    public function setParameterManager(ParameterManagerInterface $parameterManager)
     {
-        $this->parameterService = $parameterService;
+        $this->parameterManager = $parameterManager;
     }
 }

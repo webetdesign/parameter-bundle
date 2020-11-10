@@ -15,4 +15,6 @@ interface ParameterManagerInterface
 
     public function findIndexByCode();
 
+    public function getTypes();
+
 }

@@ -31,47 +31,16 @@ class ParameterService
 
     protected array $parameters = [];
 
-    protected array $types = [];
-
     private ParameterManagerInterface $manager;
 
     /**
      * ParameterService constructor.
      *
      * @param ParameterManagerInterface $manager
-     * @param array $parametersType
      */
-    public function __construct(ParameterManagerInterface $manager, $parametersType = [])
+    public function __construct(ParameterManagerInterface $manager)
     {
         $this->manager = $manager;
-        $this->types   = $this->initTypes($parametersType);
-    }
-
-    private function initTypes($types)
-    {
-        $types = array_merge(self::DEFAULT_TYPE, $types);
-
-        $tmp = [];
-        foreach ($types as $k => $v) {
-            if (!is_array($v)) {
-                $type = $v;
-            } else {
-                $type = $v['type'];
-            }
-
-            $key       = is_int($k) ? $type : $k;
-            $tmp[$key] = $type;
-        }
-
-        return $tmp;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTypes(): array
-    {
-        return $this->types;
     }
 
     /**

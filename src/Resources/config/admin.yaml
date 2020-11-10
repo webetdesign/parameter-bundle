@@ -7,4 +7,4 @@ services:
     public: true
     calls:
       - [setTranslationDomain, ['WebEtDesignParameterBundle']]
-      - [setParameterService, ['@WebEtDesign\ParameterBundle\Service\ParameterService']]
+      - [setParameterManager, ['@WebEtDesign\ParameterBundle\Model\ParameterManagerInterface']]

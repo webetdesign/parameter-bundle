@@ -3,24 +3,19 @@
 namespace WebEtDesign\ParameterBundle\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
-use WebEtDesign\ParameterBundle\Entity\Parameter;
-use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
+use WebEtDesign\ParameterBundle\Model\AbstractParameterManager;
 
-class ParameterManager implements ParameterManagerInterface
+class ParameterManager extends AbstractParameterManager
 {
     private EntityManagerInterface $manager;
 
     private ParameterRepository $repository;
 
-    public function __construct(EntityManagerInterface $manager, ParameterRepository $repository)
+    public function __construct(EntityManagerInterface $manager, ParameterRepository $repository, $parametersType = [])
     {
+        parent::__construct($parametersType);
         $this->manager    = $manager;
         $this->repository = $repository;
-    }
-
-    public function create($code = null)
-    {
-        return new Parameter($code);
     }
 
     public function add($parameter)
