@@ -15,13 +15,6 @@ use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
 
 class ParameterService
 {
-    const DEFAULT_TYPE = [
-        'text'     => 'Texte',
-        'textarea' => 'Zone de texte',
-        'number'   => 'Nombre',
-        'list'     => 'Liste',
-    ];
-
     /**
      * Cached values of parameters
      *
