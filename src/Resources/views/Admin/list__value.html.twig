@@ -1,5 +1,5 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 
 {% block field %}
-    {{ object.value|truncate(100) }}
+    {{ object.value|sonata_truncate(100) }}
 {% endblock %}
