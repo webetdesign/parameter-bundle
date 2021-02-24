@@ -7,6 +7,7 @@ namespace WebEtDesign\ParameterBundle\Controller;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\FormView;
@@ -59,9 +60,15 @@ final class ParameterAdminController extends CRUDController
         }
 
         if ($existingObject->getType() === 'file' && $existingObject->getValue()) {
-            $existingObject->setFile(
-                new File($this->getParameter($existingObject->getCode().'_directory').'/'.$existingObject->getValue())
-            );
+            try {
+                $existingObject->setFile(
+                    new File(
+                        $this->getParameter($existingObject->getCode().'_directory').'/'.$existingObject->getValue()
+                    )
+                );
+            } catch (FileNotFoundException $e) {
+                $existingObject->setValue(null);
+            }
         }
 
         $this->checkParentChildAssociation($request, $existingObject);
