@@ -3,6 +3,7 @@
 namespace WebEtDesign\ParameterBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="WebEtDesign\ParameterBundle\Doctrine\ParameterRepository")
@@ -41,6 +42,8 @@ class Parameter
      * @ORM\Column(type="boolean", nullable=false, name="deletable", options={"default": 1})
      */
     private ?bool $deletable = true;
+
+    private $file = null;
 
     /**
      * Parameter constructor.
@@ -115,6 +118,18 @@ class Parameter
     public function setValue(?string $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getFile(): ?string
+    {
+        return $this->file;
+    }
+
+    public function setFile(?File $value): self
+    {
+        $this->file = $value;
 
         return $this;
     }

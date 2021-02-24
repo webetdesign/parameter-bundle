@@ -11,7 +11,11 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Validator\Constraints\File;
 use WebEtDesign\ParameterBundle\Entity\Parameter;
+use WebEtDesign\ParameterBundle\Form\Type\ParameterFileType;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterValueType;
 use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
 
@@ -45,12 +49,20 @@ final class ParameterAdmin extends AbstractAdmin
             ->addIdentifier('code')
             ->add('type')
             ->add('label')
-            ->add('value', null, [
-                'template' => '@WebEtDesignParameter/Admin/list__value.html.twig',
-            ])
-            ->add('_action', null, [
-                'actions' => $actions,
-            ]);
+            ->add(
+                'value',
+                null,
+                [
+                    'template' => '@WebEtDesignParameter/Admin/list__value.html.twig',
+                ]
+            )
+            ->add(
+                '_action',
+                null,
+                [
+                    'actions' => $actions,
+                ]
+            );
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
@@ -66,12 +78,16 @@ final class ParameterAdmin extends AbstractAdmin
         $formMapper
             ->with('Info', ['class' => 'col-md-3'])
             ->add('code', null, $options)
-            ->add('type', ChoiceType::class, array_merge(
-                $options,
-                [
-                    'choices' => array_flip($this->parameterManager->getTypes()),
-                ],
-            ))
+            ->add(
+                'type',
+                ChoiceType::class,
+                array_merge(
+                    $options,
+                    [
+                        'choices' => array_flip($this->parameterManager->getTypes()),
+                    ],
+                )
+            )
             ->add('deletable', null, $options)
             ->end();
 
@@ -80,16 +96,47 @@ final class ParameterAdmin extends AbstractAdmin
             $formMapper
                 ->with('Configuration', ['class' => 'col-md-9'])
                 ->add('label')
-                ->add('value', ParameterValueType::class, [
-                    'type' => $subject->getType(),
-                ])
+                ->ifTrue($subject->getType() === 'file')
+                ->add(
+                    'file',
+                    ParameterFileType::class,
+                    [
+                        'required' => false,
+                        'mapped' => false,
+                        'label' => 'Fichier',
+                        'constraints' => [
+                            new File([
+                                'maxSize' => '1024k',
+                                'mimeTypes' => [
+                                    'application/pdf',
+                                    'application/x-pdf',
+                                ],
+                                'mimeTypesMessage' => 'Please upload a valid PDF document',
+                            ])
+                        ],
+                    ]
+                )
+                ->ifEnd()
+                ->ifFalse($subject->getType())
+                ->add(
+                    'value',
+                    ParameterValueType::class,
+                    [
+                        'type' => $subject->getType(),
+                    ]
+                )
+                ->ifEnd()
                 ->end();
         } else {
             $formMapper
                 ->with('Configuration', ['class' => 'col-md-9'])
-                ->add('config', null, [
-                    'label' => false,
-                ])
+                ->add(
+                    'config',
+                    null,
+                    [
+                        'label' => false,
+                    ]
+                )
                 ->end();
         }
     }

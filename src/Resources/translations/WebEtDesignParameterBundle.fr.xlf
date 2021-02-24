@@ -31,6 +31,18 @@
         <target>Liste des paramètres</target>
       </segment>
     </unit>
+    <unit id="yQKnBTv" name="Parameter Create">
+      <segment>
+        <source>Parameter Create</source>
+        <target>Ajouter un paramètre</target>
+      </segment>
+    </unit>
+    <unit id="yQKIgTh" name="Parameter Edit">
+      <segment>
+        <source>Parameter Edit</source>
+        <target>Modifier un paramètre</target>
+      </segment>
+    </unit>
     <unit id="ZM.xMZ0" name="Action">
       <segment>
         <source>Action</source>
@@ -40,7 +52,7 @@
     <unit id="3QZuwb8" name="Parameter">
       <segment>
         <source>Parameter</source>
-        <target>Paramètre</target>
+        <target>Paramètres</target>
       </segment>
     </unit>
     <unit id="3QZupb8" name="Deletable">

@@ -11,6 +11,7 @@ abstract class AbstractParameterManager implements ParameterManagerInterface
         'textarea' => 'Zone de texte',
         'number'   => 'Nombre',
         'list'     => 'Liste',
+        'file'     => 'Fichier',
     ];
 
     protected array $types = [];
