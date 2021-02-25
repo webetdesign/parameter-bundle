@@ -106,7 +106,7 @@ final class ParameterAdmin extends AbstractAdmin
                         'label' => 'Fichier',
                         'constraints' => [
                             new File([
-                                'maxSize' => '4096k',
+                                'maxSize' => '5m',
                                 'mimeTypes' => [
                                     'application/pdf',
                                     'application/x-pdf',
