@@ -100,24 +100,6 @@ final class ParameterAdminController extends CRUDController
                     $file = $form->get('file')->getData();
 
                     if ($file) {
-                        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                        // this is needed to safely include the file name as part of the URL
-                        $safeFilename = transliterator_transliterate(
-                            'Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',
-                            $originalFilename
-                        );
-                        $newFilename  = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-
-                        // Move the file to the directory
-                        try {
-                            $file->move(
-                                $this->getParameter($submittedObject->getCode().'_directory'),
-                                $newFilename
-                            );
-                        } catch (FileException $e) {
-                            // ... handle exception if something happens during file upload
-                        }
-
                         // clean old file
                         try {
                             $this->get('filesystem')->remove(
@@ -127,6 +109,24 @@ final class ParameterAdminController extends CRUDController
                             );
                         } catch (IOException $e) {
 
+                        }
+
+                        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        // this is needed to safely include the file name as part of the URL
+                        $safeFilename = transliterator_transliterate(
+                            'Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',
+                            $originalFilename
+                        );
+                        $newFilename  = $safeFilename.'.'.$file->guessExtension();
+
+                        // Move the file to the directory
+                        try {
+                            $file->move(
+                                $this->getParameter($submittedObject->getCode().'_directory'),
+                                $newFilename
+                            );
+                        } catch (FileException $e) {
+                            // ... handle exception if something happens during file upload
                         }
 
                         $submittedObject->setValue($newFilename);
