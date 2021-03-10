@@ -1,7 +1,7 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 
 {% block field %}
-    {% if object.type != 'file' %}
+    {% if object.type != 'file' and object.value is not null %}
         {{ object.value|sonata_truncate(100) }}
     {% else %}
         {{ object.value }}

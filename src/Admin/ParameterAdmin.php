@@ -117,7 +117,7 @@ final class ParameterAdmin extends AbstractAdmin
                     ]
                 )
                 ->ifEnd()
-                ->ifFalse($subject->getType())
+                ->ifFalse($subject->getType() === 'file')
                 ->add(
                     'value',
                     ParameterValueType::class,
