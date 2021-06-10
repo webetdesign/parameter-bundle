@@ -107,14 +107,14 @@ class Parameter
         return $this;
     }
 
-    public function getValue(): ?string
+    public function getValue()
     {
-        return $this->value;
+        return $this->type === 'boolean' ? (bool) $this->value : $this->value;
     }
 
-    public function setValue(?string $value): self
+    public function setValue($value): self
     {
-        $this->value = $value;
+        $this->value = $this->type === 'boolean' ? intval($value) : $value;
 
         return $this;
     }

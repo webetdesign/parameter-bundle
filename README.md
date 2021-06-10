@@ -34,6 +34,7 @@ web_et_design_parameter:
       - textarea
       - number
       - list
+      - boolean
   fixtures:
     fixture1:
       type: list #default text

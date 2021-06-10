@@ -10,7 +10,10 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Event\PreSubmitEvent;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormEvents;
 use WebEtDesign\ParameterBundle\Entity\Parameter;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterValueType;
 use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
@@ -79,11 +82,19 @@ final class ParameterAdmin extends AbstractAdmin
         if ($subject instanceof Parameter && $this->isCurrentRoute('edit')) {
             $formMapper
                 ->with('Configuration', ['class' => 'col-md-9'])
-                ->add('label')
-                ->add('value', ParameterValueType::class, [
+                ->add('label');
+            if($subject->getType() == 'boolean'){
+                $formMapper->add('value', CheckboxType::class, [
+                    'required' => false,
+                    'value' => $subject->getValue()
+                ]);
+            }else{
+                $formMapper->add('value', ParameterValueType::class, [
                     'type' => $subject->getType(),
-                ])
-                ->end();
+                ]);
+            }
+
+            $formMapper->end();
         } else {
             $formMapper
                 ->with('Configuration', ['class' => 'col-md-9'])
@@ -92,6 +103,8 @@ final class ParameterAdmin extends AbstractAdmin
                 ])
                 ->end();
         }
+
+
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void

@@ -1,5 +1,13 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 
 {% block field %}
+    {% if object.type == 'boolean' %}
+        {% if object.value == 1 %}
+            <span class="label label-success">oui</span>
+        {% else%}
+            <span class="label label-danger">non</span>
+        {% endif %}
+    {% else%}
     {{ object.value|sonata_truncate(100) }}
+    {% endif %}
 {% endblock %}
