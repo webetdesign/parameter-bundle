@@ -130,7 +130,7 @@ final class ParameterAdmin extends AbstractAdmin
                     ]
                 )
                 ->ifEnd()
-                ->ifFalse($subject->getType() === 'file' && $subject->getType() === 'boolean')
+                ->ifFalse($subject->getType() === 'file' || $subject->getType() === 'boolean')
                 ->add(
                     'value',
                     ParameterValueType::class,
