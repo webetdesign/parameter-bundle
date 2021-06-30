@@ -10,10 +10,13 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Event\PreSubmitEvent;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\FormEvents;
 use WebEtDesign\ParameterBundle\Entity\Parameter;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterFileType;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterValueType;
@@ -117,7 +120,17 @@ final class ParameterAdmin extends AbstractAdmin
                     ]
                 )
                 ->ifEnd()
-                ->ifFalse($subject->getType() === 'file')
+                ->ifTrue($subject->getType() === 'boolean')
+                ->add(
+                    'value',
+                    CheckboxType::class,
+                    [
+                        'required' => false,
+                        'value'    => $subject->getValue(),
+                    ]
+                )
+                ->ifEnd()
+                ->ifFalse($subject->getType() === 'file' && $subject->getType() === 'boolean')
                 ->add(
                     'value',
                     ParameterValueType::class,
