@@ -114,16 +114,14 @@ final class ParameterAdmin extends AbstractAdmin
                         'mapped'      => false,
                         'label'       => 'Fichier',
                         'constraints' => [
-                            new File(
-                                [
-                                    'maxSize'          => '5m',
-                                    'mimeTypes'        => [
-                                        'application/pdf',
-                                        'application/x-pdf',
-                                    ],
-                                    'mimeTypesMessage' => 'Please upload a valid PDF document',
-                                ]
-                            ),
+                            new File([
+                                'maxSize' => '15m',
+                                'mimeTypes' => [
+                                    'application/pdf',
+                                    'application/x-pdf',
+                                ],
+                                'mimeTypesMessage' => 'Please upload a valid PDF document',
+                            ])
                         ],
                     ]
                 )
