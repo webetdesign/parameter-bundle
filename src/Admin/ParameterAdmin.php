@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace WebEtDesign\ParameterBundle\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Form\FormEvents;
+use WebEtDesign\MediaBundle\CMS\transformer\MediaContentTransformer;
 use WebEtDesign\MediaBundle\Form\Type\WDMediaType;
 use WebEtDesign\ParameterBundle\Entity\Parameter;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterFileType;
@@ -26,6 +24,13 @@ use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
 final class ParameterAdmin extends AbstractAdmin
 {
     protected ParameterManagerInterface $parameterManager;
+    protected EntityManagerInterface $entityManager;
+
+    public function __construct($code, $class, $baseControllerName, $em)
+    {
+        $this->entityManager = $em;
+        parent::__construct($code, $class, $baseControllerName);
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
@@ -105,18 +110,20 @@ final class ParameterAdmin extends AbstractAdmin
                     'file',
                     ParameterFileType::class,
                     [
-                        'required' => false,
-                        'mapped' => false,
-                        'label' => 'Fichier',
+                        'required'    => false,
+                        'mapped'      => false,
+                        'label'       => 'Fichier',
                         'constraints' => [
-                            new File([
-                                'maxSize' => '5m',
-                                'mimeTypes' => [
-                                    'application/pdf',
-                                    'application/x-pdf',
-                                ],
-                                'mimeTypesMessage' => 'Please upload a valid PDF document',
-                            ])
+                            new File(
+                                [
+                                    'maxSize'          => '5m',
+                                    'mimeTypes'        => [
+                                        'application/pdf',
+                                        'application/x-pdf',
+                                    ],
+                                    'mimeTypesMessage' => 'Please upload a valid PDF document',
+                                ]
+                            ),
                         ],
                     ]
                 )
@@ -131,7 +138,9 @@ final class ParameterAdmin extends AbstractAdmin
                     ]
                 )
                 ->ifEnd()
-                ->ifTrue($subject->getType() === 'media' && class_exists('WebEtDesign\MediaBundle\Form\Type\WDMediaType'))
+                ->ifTrue(
+                    $subject->getType() === 'media' && class_exists('WebEtDesign\MediaBundle\Form\Type\WDMediaType')
+                )
                 ->add(
                     'value',
                     WDMediaType::class,
@@ -141,7 +150,7 @@ final class ParameterAdmin extends AbstractAdmin
                     ]
                 )
                 ->ifEnd()
-                ->ifFalse(in_array($subject->getType(),['file','boolean','media']))
+                ->ifFalse(in_array($subject->getType(), ['file', 'boolean', 'media']))
                 ->add(
                     'value',
                     ParameterValueType::class,
@@ -162,6 +171,13 @@ final class ParameterAdmin extends AbstractAdmin
                     ]
                 )
                 ->end();
+        }
+
+        if ($subject->getType() === 'media') {
+            $formMapper
+                ->getFormBuilder()
+                ->get('value')
+                ->addModelTransformer(new MediaContentTransformer($this->entityManager));
         }
     }
 

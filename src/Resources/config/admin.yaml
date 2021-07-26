@@ -1,7 +1,11 @@
 services:
   admin.parameters:
     class: WebEtDesign\ParameterBundle\Admin\ParameterAdmin
-    arguments: [~, WebEtDesign\ParameterBundle\Entity\Parameter, WebEtDesign\ParameterBundle\Controller\ParameterAdminController]
+    arguments:
+      - ~
+      - WebEtDesign\ParameterBundle\Entity\Parameter
+      - WebEtDesign\ParameterBundle\Controller\ParameterAdminController
+      - '@doctrine.orm.entity_manager'
     tags:
       - { name: sonata.admin, manager_type: orm, group: Admin, label: Parameter, icon: '<i class="fa fa-cogs"></i>' }
     public: true
