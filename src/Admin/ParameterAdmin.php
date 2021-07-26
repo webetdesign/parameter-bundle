@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\FormEvents;
+use WebEtDesign\MediaBundle\Form\Type\WDMediaType;
 use WebEtDesign\ParameterBundle\Entity\Parameter;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterFileType;
 use WebEtDesign\ParameterBundle\Form\Type\ParameterValueType;
@@ -130,7 +131,17 @@ final class ParameterAdmin extends AbstractAdmin
                     ]
                 )
                 ->ifEnd()
-                ->ifFalse($subject->getType() === 'file' || $subject->getType() === 'boolean')
+                ->ifTrue($subject->getType() === 'media' && class_exists('WebEtDesign\MediaBundle\Form\Type\WDMediaType'))
+                ->add(
+                    'value',
+                    WDMediaType::class,
+                    [
+                        'required' => false,
+                        'category' => 'media_parameter',
+                    ]
+                )
+                ->ifEnd()
+                ->ifFalse(in_array($subject->getType(),['file','boolean','media']))
                 ->add(
                     'value',
                     ParameterValueType::class,
