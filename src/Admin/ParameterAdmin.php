@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebEtDesign\ParameterBundle\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -13,6 +14,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\File;
 use WebEtDesign\MediaBundle\CMS\transformer\MediaContentTransformer;
 use WebEtDesign\MediaBundle\Form\Type\WDMediaType;
@@ -25,10 +27,12 @@ final class ParameterAdmin extends AbstractAdmin
 {
     protected ParameterManagerInterface $parameterManager;
     protected EntityManagerInterface $entityManager;
+    protected array $types = [];
 
-    public function __construct($code, $class, $baseControllerName, $em)
+    public function __construct($code, $class, $baseControllerName, $em,  $types)
     {
         $this->entityManager = $em;
+        $this->types = $types;
         parent::__construct($code, $class, $baseControllerName);
     }
 
@@ -101,18 +105,26 @@ final class ParameterAdmin extends AbstractAdmin
             ->end();
 
         $subject = $this->getSubject();
+
         if ($subject instanceof Parameter && $this->isCurrentRoute('edit')) {
+            $help = null;
+
+            if(array_key_exists($subject->getCode(), $this->types) && array_key_exists('help', $this->types[$subject->getCode()])){
+                $help = $this->types[$subject->getCode()]['help'];
+            }
+
             $formMapper
                 ->with('Configuration', ['class' => 'col-md-9'])
-                ->add('label')
+                    ->add('label')
                 ->ifTrue($subject->getType() === 'file')
-                ->add(
+                    ->add(
                     'file',
                     ParameterFileType::class,
                     [
                         'required'    => false,
                         'mapped'      => false,
                         'label'       => 'Fichier',
+                        'help' => $help,
                         'constraints' => [
                             new File([
                                 'maxSize' => '15m',
@@ -127,36 +139,52 @@ final class ParameterAdmin extends AbstractAdmin
                 )
                 ->ifEnd()
                 ->ifTrue($subject->getType() === 'boolean')
-                ->add(
-                    'value',
-                    CheckboxType::class,
-                    [
-                        'required' => false,
-                        'value'    => $subject->getValue(),
-                    ]
-                )
+                    ->add(
+                        'value',
+                        CheckboxType::class,
+                        [
+                            'required' => false,
+                            'value'    => $subject->getValue(),
+                            'help' => $help,
+                        ]
+                    )
                 ->ifEnd()
                 ->ifTrue(
                     $subject->getType() === 'media' && class_exists('WebEtDesign\MediaBundle\Form\Type\WDMediaType')
                 )
-                ->add(
-                    'value',
-                    WDMediaType::class,
-                    [
-                        'required' => false,
-                        'category' => 'media_parameter',
-                    ]
-                )
+                    ->add(
+                        'value',
+                        WDMediaType::class,
+                        [
+                            'required' => false,
+                            'category' => 'media_parameter',
+                            'help' => $help,
+                        ]
+                    )
                 ->ifEnd()
-                ->ifFalse(in_array($subject->getType(), ['file', 'boolean', 'media']))
-                ->add(
-                    'value',
-                    ParameterValueType::class,
-                    [
-                        'type' => $subject->getType(),
-                    ]
-                )
+                ->ifTrue($subject->getType() === 'textarea')
+                    ->add(
+                        'value',
+                        TextareaType::class,
+                        [
+                            'help' => $help,
+                        ]
+                    )
                 ->ifEnd()
+                ->ifFalse(in_array($subject->getType(), ['file', 'boolean', 'media', 'textarea', 'ckeditor']))
+                    ->add(
+                        'value',
+                        ParameterValueType::class,
+                        [
+                            'type' => $subject->getType(),
+                            'help' => $help,
+                        ]
+                    )
+                ->ifEnd()
+
+            ;
+
+            $formMapper
                 ->end();
         } else {
             $formMapper

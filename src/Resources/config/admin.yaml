@@ -6,6 +6,7 @@ services:
       - WebEtDesign\ParameterBundle\Entity\Parameter
       - WebEtDesign\ParameterBundle\Controller\ParameterAdminController
       - '@doctrine.orm.entity_manager'
+      - '%parameter.fixtures%'
     tags:
       - { name: sonata.admin, manager_type: orm, group: Admin, label: Parameter, icon: '<i class="fa fa-cogs"></i>' }
     public: true
