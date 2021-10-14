@@ -4,7 +4,7 @@ namespace WebEtDesign\ParameterBundle\Repository;
 
 use WebEtDesign\ParameterBundle\Entity\Parameter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Parameter|null find($id, $lockMode = null, $lockVersion = null)
