@@ -9,10 +9,10 @@
     }
   ],
   "require": {
-    "php": "^7.4",
-    "doctrine/common": "^2.7",
+    "php": "^7.4|^8.0",
+    "doctrine/common": "^2.0|^3.0",
     "doctrine/orm": "^2.6",
-    "doctrine/doctrine-bundle": "^1.10",
+    "doctrine/doctrine-bundle": "^1.10|^2.4",
     "symfony/config": "^4.0",
     "symfony/dependency-injection": "^4.0",
     "symfony/doctrine-bridge": "^4.2",
