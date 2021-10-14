@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('type')->defaultValue('text')->end()
                             ->scalarNode('label')->end()
+                            ->scalarNode('help')->defaultNull()->end()
                             ->scalarNode('default_value')->beforeNormalization()->ifArray()->then(function ($v) { return implode(';', $v); })->end()
                         ->end()
                     ->end()

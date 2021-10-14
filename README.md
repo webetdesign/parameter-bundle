@@ -34,6 +34,7 @@ web_et_design_parameter:
       - textarea
       - number
       - list
+      - boolean
   fixtures:
     fixture1:
       type: list #default text
@@ -68,3 +69,15 @@ php bin/console parameter:fixture
 ```
 
 It's automatically add parameter define in the configuration "fixtures" section
+
+## File parameter
+For file parameters you will have to add the path in the parameter of your application like that:
+
+```yaml
+#config/services.yaml
+parameters:
+    product_catalogue_file_directory: '%kernel.project_dir%/public/upload/catalogue'
+
+```
+
+The key must be build with the following pattern: **[code of the parameter]_directory**

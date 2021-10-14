@@ -44,3 +44,10 @@
         {{ form_widget(form, {type: 'hidden', attr: {class: 'parameter-value'}}) }}
     </div>
 {% endblock %}
+
+{% block parameters_file_widget %}
+    {{- form_widget(form) -}}
+    {% if form.parent.vars.value.value is defined %}
+        Fichier chargé: {{ form.parent.vars.value.value }}
+    {% endif %}
+{% endblock %}
