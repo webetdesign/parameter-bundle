@@ -128,11 +128,6 @@ final class ParameterAdmin extends AbstractAdmin
                         'constraints' => [
                             new File([
                                 'maxSize' => '15m',
-                                'mimeTypes' => [
-                                    'application/pdf',
-                                    'application/x-pdf',
-                                ],
-                                'mimeTypesMessage' => 'Please upload a valid PDF document',
                             ])
                         ],
                     ]
