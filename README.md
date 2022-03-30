@@ -35,6 +35,8 @@ web_et_design_parameter:
       - number
       - list
       - boolean
+      - file
+      - media
   fixtures:
     fixture1:
       type: list #default text
@@ -81,3 +83,17 @@ parameters:
 ```
 
 The key must be build with the following pattern: **[code of the parameter]_directory**
+
+## Media type
+To use the media parameter type, the webetdesign/wd-media-bundle must be enable.
+
+````yaml
+#config/packages/webetdesign/wd_media.yaml
+categories:
+  media_parameter:
+      label: Media des paramètres
+      formats:
+        default:
+          xl:
+            #[...]
+````
