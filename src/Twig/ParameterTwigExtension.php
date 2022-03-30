@@ -23,7 +23,7 @@ class ParameterTwigExtension extends AbstractExtension
         ];
     }
 
-    public function getParameter(string $code, string $default = ''): string
+    public function getParameter(string $code, string $default = '')
     {
         return $this->parameterService->getValue($code, $default);
     }

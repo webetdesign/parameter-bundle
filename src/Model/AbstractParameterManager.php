@@ -13,6 +13,7 @@ abstract class AbstractParameterManager implements ParameterManagerInterface
         'list'     => 'Liste',
         'boolean'  => 'Case à cocher',
         'file'     => 'Fichier',
+        'media'    => 'Media'
     ];
 
     protected array $types = [];
@@ -25,6 +26,10 @@ abstract class AbstractParameterManager implements ParameterManagerInterface
     protected function initTypes($types): array
     {
         $types = array_merge(self::DEFAULT_TYPE, $types);
+
+        if (!class_exists('WebEtDesign\MediaBundle\Entity\Media')){
+            unset($types['media']);
+        }
 
         $tmp = [];
         foreach ($types as $k => $v) {

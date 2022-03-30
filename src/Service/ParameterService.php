@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace WebEtDesign\ParameterBundle\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
+use WebEtDesign\MediaBundle\CMS\transformer\MediaContentTransformer;
 use WebEtDesign\ParameterBundle\Entity\Parameter;
 use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
 
@@ -25,10 +27,12 @@ class ParameterService
     protected array $parameters = [];
 
     private ParameterManagerInterface $manager;
+    private EntityManagerInterface $em;
 
-    public function __construct(ParameterManagerInterface $manager)
+    public function __construct(ParameterManagerInterface $manager, EntityManagerInterface $em)
     {
         $this->manager = $manager;
+        $this->em = $em;
     }
 
     public function getParameter(string $code): ?Parameter
@@ -42,13 +46,20 @@ class ParameterService
         return $this->parameters[$code];
     }
 
-    public function getValue(string $code, string $default = ''): string
+    public function getValue(string $code, string $default = '')
     {
         if (!isset($this->values[$code])) {
+            /** @var Parameter|null $parameter */
             $parameter = $this->manager->find($code);
 
-            $this->values[$code] = $parameter ? $parameter->getValue() : $default;
+            if ($parameter && $parameter->getType() === 'media'){
+                $transformer = new MediaContentTransformer($this->em);
+                $this->values[$code] = $transformer->transform($parameter->getValue());
+            }else{
+                $this->values[$code] = $parameter ? $parameter->getValue() : $default;
+            }
         }
+
 
         return $this->values[$code];
     }
