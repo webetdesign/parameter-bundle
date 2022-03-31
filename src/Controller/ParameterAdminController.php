@@ -27,14 +27,12 @@ final class ParameterAdminController extends CRUDController
     /**
      * Edit action.
      *
-     * @param int|string|null $deprecatedId
-     *
-     * @return Response|RedirectResponse
-     * @throws AccessDeniedException If access is not granted
-     *
-     * @throws NotFoundHttpException If the object does not exist
+     * @param Request $request
+     * @return Response
+     * @throws \Sonata\AdminBundle\Exception\ModelManagerThrowable
+     * @throws \Twig\Error\RuntimeError
      */
-    public function editAction($deprecatedId = null) // NEXT_MAJOR: Remove the unused $id parameter
+    public function editAction(Request $request): Response // NEXT_MAJOR: Remove the unused $id parameter
     {
         if (isset(\func_get_args()[0])) {
             @trigger_error(
@@ -70,8 +68,6 @@ final class ParameterAdminController extends CRUDController
                 $existingObject->setValue(null);
             }
         }
-
-        $this->checkParentChildAssociation($request, $existingObject);
 
         $this->admin->checkAccess('edit', $existingObject);
 
@@ -201,13 +197,12 @@ final class ParameterAdminController extends CRUDController
         }
 
         $formView = $form->createView();
+
         // set the theme for the current Admin Form
-        $this->setFormTheme($formView, $this->admin->getFormTheme());
+        $twig = $this->get('twig');
+        $twig->getRuntime(FormRenderer::class)->setTheme($formView, $this->admin->getFormTheme());
 
-        // NEXT_MAJOR: Remove this line and use commented line below it instead
-        $template = $this->admin->getTemplate($templateKey);
-
-        // $template = $this->templateRegistry->getTemplate($templateKey);
+        $template = $this->admin->getTemplateRegistry()->getTemplate($templateKey);
 
         return $this->renderWithExtraParams(
             $template,
@@ -219,44 +214,5 @@ final class ParameterAdminController extends CRUDController
             ],
             null
         );
-    }
-
-    /**
-     * @phpstan-param T $object
-     */
-    private function checkParentChildAssociation(Request $request, object $object): void
-    {
-        if (!$this->admin->isChild()) {
-            return;
-        }
-
-        // NEXT_MAJOR: remove this check
-        if (!$this->admin->getParentAssociationMapping()) {
-            return;
-        }
-
-        $parentAdmin = $this->admin->getParent();
-        $parentId    = $request->get($parentAdmin->getIdParameter());
-
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $propertyPath     = new PropertyPath($this->admin->getParentAssociationMapping());
-
-        if ($parentAdmin->getObject($parentId) !== $propertyAccessor->getValue($object, $propertyPath)) {
-            // NEXT_MAJOR: make this exception
-            @trigger_error(
-                'Accessing a child that isn\'t connected to a given parent is deprecated since sonata-project/admin-bundle 3.34 and won\'t be allowed in 4.0.',
-                \E_USER_DEPRECATED
-            );
-        }
-    }
-
-    /**
-     * Sets the admin form theme to form view. Used for compatibility between Symfony versions.
-     */
-    private function setFormTheme(FormView $formView, ?array $theme = null): void
-    {
-        $twig = $this->get('twig');
-
-        $twig->getRuntime(FormRenderer::class)->setTheme($formView, $theme);
     }
 }

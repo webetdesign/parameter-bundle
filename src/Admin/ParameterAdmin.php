@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -45,8 +46,6 @@ final class ParameterAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $listMapper): void
     {
-        unset($this->listModes['mosaic']);
-
         if ($this->hasAccess('edit')) {
             $actions = [
                 'edit'   => [],
@@ -210,16 +209,15 @@ final class ParameterAdmin extends AbstractAdmin
             ->add('value');
     }
 
-    protected function configureRoutes(RouteCollection $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection
             ->remove('export')
             ->remove('batch');
     }
 
-    public function getBatchActions(): array
+    protected function configureBatchActions(array $actions): array
     {
-        $actions = parent::getBatchActions();
         unset($actions['delete']);
 
         return $actions;
