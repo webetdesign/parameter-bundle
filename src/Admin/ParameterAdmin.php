@@ -69,7 +69,7 @@ final class ParameterAdmin extends AbstractAdmin
                 ]
             )
             ->add(
-                '_action',
+                ListMapper::NAME_ACTIONS,
                 null,
                 [
                     'actions' => $actions,

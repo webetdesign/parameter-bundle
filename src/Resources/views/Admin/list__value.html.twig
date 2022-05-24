@@ -8,7 +8,7 @@
             <span class="label label-danger">non</span>
         {% endif %}
     {% elseif object.type != 'file' and object.value is not null %}
-        {{ object.value|sonata_truncate(100) }}
+        {{ object.value|u.truncate(100) }}
     {% else %}
         {{ object.value }}
     {% endif %}
