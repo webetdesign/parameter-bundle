@@ -88,7 +88,7 @@ final class ParameterAdminController extends CRUDController
             $isFormValid = $form->isValid();
 
             // persist if the form was valid and if in preview mode the preview was approved
-            if ($isFormValid && (!$this->isInPreviewMode() || $this->isPreviewApproved())) {
+            if ($isFormValid && (!$this->isInPreviewMode($this->admin->getRequest()) || $this->isPreviewApproved($this->admin->getRequest()))) {
                 /** @phpstan-var T $submittedObject */
                 $submittedObject = $form->getData();
 
@@ -134,7 +134,7 @@ final class ParameterAdminController extends CRUDController
                 try {
                     $existingObject = $this->admin->update($submittedObject);
 
-                    if ($this->isXmlHttpRequest()) {
+                    if ($this->isXmlHttpRequest($this->admin->getRequest())) {
                         return $this->handleXmlHttpRequestSuccessResponse($request, $existingObject);
                     }
 
@@ -148,7 +148,7 @@ final class ParameterAdminController extends CRUDController
                     );
 
                     // redirect to edit mode
-                    return $this->redirectTo($existingObject);
+                    return $this->redirectTo($this->admin->getRequest(), $existingObject);
                 } catch (ModelManagerException $e) {
                     $this->handleModelManagerException($e);
 
@@ -174,7 +174,7 @@ final class ParameterAdminController extends CRUDController
 
             // show an error message if the form failed validation
             if (!$isFormValid) {
-                if ($this->isXmlHttpRequest() && null !== ($response = $this->handleXmlHttpRequestErrorResponse(
+                if ($this->isXmlHttpRequest($this->admin->getRequest()) && null !== ($response = $this->handleXmlHttpRequestErrorResponse(
                         $request,
                         $form
                     ))) {
@@ -189,7 +189,7 @@ final class ParameterAdminController extends CRUDController
                         'SonataAdminBundle'
                     )
                 );
-            } elseif ($this->isPreviewRequested()) {
+            } elseif ($this->isPreviewRequested($this->admin->getRequest())) {
                 // enable the preview template if the form was valid and preview was requested
                 $templateKey = 'preview';
                 $this->admin->getShow();
