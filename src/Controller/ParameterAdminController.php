@@ -49,7 +49,7 @@ final class ParameterAdminController extends CRUDController
         // the key used to lookup the template
         $templateKey = 'edit';
 
-        $request        = $this->getRequest();
+        $request        = $this->admin->getRequest();
         $id             = $request->get($this->admin->getIdParameter());
         $existingObject = $this->admin->getObject($id);
 
