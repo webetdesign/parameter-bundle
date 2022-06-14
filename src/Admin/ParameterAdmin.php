@@ -165,6 +165,15 @@ final class ParameterAdmin extends AbstractAdmin
                         ]
                     )
                 ->ifEnd()
+                ->ifTrue($subject->getType() === 'ckeditor')
+                ->add(
+                    'value',
+                    CKEditorType::class,
+                    [
+                        'help' => $help,
+                    ]
+                )
+                ->ifEnd()
                 ->ifFalse(in_array($subject->getType(), ['file', 'boolean', 'media', 'textarea', 'ckeditor']))
                     ->add(
                         'value',
@@ -175,7 +184,6 @@ final class ParameterAdmin extends AbstractAdmin
                         ]
                     )
                 ->ifEnd()
-
             ;
 
             $formMapper
