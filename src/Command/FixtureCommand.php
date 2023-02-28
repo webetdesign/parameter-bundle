@@ -29,7 +29,7 @@ class FixtureCommand extends Command
             ->setDescription('Create functional parameter in database');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $parameters = $this->manager->findIndexByCode();
         foreach ($this->parameterFixtures as $code => $fixture) {
@@ -53,5 +53,7 @@ class FixtureCommand extends Command
         $this->manager->save();
 
         $output->writeln('<info>Parameters saved</info>');
+
+        return Command::SUCCESS;
     }
 }

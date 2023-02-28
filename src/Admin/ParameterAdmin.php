@@ -10,9 +10,9 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -27,24 +27,28 @@ use WebEtDesign\ParameterBundle\Model\ParameterManagerInterface;
 final class ParameterAdmin extends AbstractAdmin
 {
     protected ParameterManagerInterface $parameterManager;
-    protected EntityManagerInterface $entityManager;
     protected array $types = [];
 
-    public function __construct($code, $class, $baseControllerName, $em,  $types)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private ParameterBagInterface $parameterBag,
+        ?string $code = null,
+        ?string $class = null,
+        ?string $baseControllerName = null,
+    )
     {
-        $this->entityManager = $em;
-        $this->types = $types;
+        $this->types = $this->parameterBag->get('parameter.fixtures');
         parent::__construct($code, $class, $baseControllerName);
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('code')
             ->add('label');
     }
 
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
         if ($this->hasAccess('edit')) {
             $actions = [
@@ -57,7 +61,7 @@ final class ParameterAdmin extends AbstractAdmin
             ];
         }
 
-        $listMapper
+        $list
             ->addIdentifier('code')
             ->add('type')
             ->add('label')
@@ -77,7 +81,7 @@ final class ParameterAdmin extends AbstractAdmin
             );
     }
 
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
         $options = [];
         if ($this->isCurrentRoute('edit')) {
@@ -87,7 +91,7 @@ final class ParameterAdmin extends AbstractAdmin
             ];
         }
 
-        $formMapper
+        $form
             ->with('Info', ['class' => 'col-md-3'])
             ->add('code', null, $options)
             ->add(
@@ -112,7 +116,7 @@ final class ParameterAdmin extends AbstractAdmin
                 $help = $this->types[$subject->getCode()]['help'];
             }
 
-            $formMapper
+            $form
                 ->with('Configuration', ['class' => 'col-md-9'])
                     ->add('label')
                 ->ifTrue($subject->getType() === 'file')
@@ -186,10 +190,10 @@ final class ParameterAdmin extends AbstractAdmin
                 ->ifEnd()
             ;
 
-            $formMapper
+            $form
                 ->end();
         } else {
-            $formMapper
+            $form
                 ->with('Configuration', ['class' => 'col-md-9'])
                 ->add(
                     'config',
@@ -202,7 +206,7 @@ final class ParameterAdmin extends AbstractAdmin
         }
 
         if ($subject->getType() === 'media') {
-            $formMapper
+            $form
                 ->getFormBuilder()
                 ->get('value')
                 ->addModelTransformer(new MediaContentTransformer($this->entityManager));

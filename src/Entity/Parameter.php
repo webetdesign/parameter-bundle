@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace WebEtDesign\ParameterBundle\Entity;
 
@@ -8,52 +9,28 @@ use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\HttpFoundation\File\File;
 use WebEtDesign\ParameterBundle\Doctrine\ParameterRepository;
 
-/**
- * @ORM\Entity(repositoryClass="WebEtDesign\ParameterBundle\Doctrine\ParameterRepository")
- * @ORM\Table(name="parameter")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="rarely_changes")
- */
 #[ORM\Entity(repositoryClass: ParameterRepository::class)]
-#[ORM\Table(name: "parameter")]
-#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "rarely_changes")]
+#[ORM\Table(name: 'parameter')]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'rarely_changes')]
 class Parameter
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length=50, name="code")
-     */
     #[ORM\Id]
-    #[ORM\Column(type: Types::STRING, length: 50, name: "code")]
+    #[ORM\Column(name: 'code', type: Types::STRING, length: 50)]
     private string $code = '';
 
-    /**
-     * @ORM\Column(type="string", length=10, nullable=false, name="type", options={"default": "text"})
-     */
-    #[ORM\Column(type: Types::STRING, length: 10, name: "type", nullable: false, options: ["default"=>"text"])]
+    #[ORM\Column(name: 'type', type: Types::STRING, length: 10, nullable: false, options: ['default' => 'text'])]
     private string $type = 'text';
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $config = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false, name="label")
-     */
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: false, name: "label")]
+    #[ORM\Column(name: 'label', type: Types::STRING, length: 255, nullable: false)]
     private string $label = '';
 
-    /**
-     * @ORM\Column(type="text", nullable=true, name="value")
-     */
-    #[ORM\Column(type: Types::TEXT, nullable: true, name: "value")]
+    #[ORM\Column(name: 'value', type: Types::TEXT, nullable: true)]
     private ?string $value = null;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=false, name="deletable", options={"default": 1})
-     */
-    #[ORM\Column(type: Types::BOOLEAN, nullable: false, name: "deletable", options: ["default" => 1])]
+    #[ORM\Column(name: 'deletable', type: Types::BOOLEAN, nullable: false, options: ['default' => 1])]
     private ?bool $deletable = true;
 
     private $file = null;

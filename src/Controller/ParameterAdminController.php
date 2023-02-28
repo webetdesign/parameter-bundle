@@ -7,7 +7,9 @@ namespace WebEtDesign\ParameterBundle\Controller;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
+use Sonata\AdminBundle\Exception\ModelManagerThrowable;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -20,17 +22,21 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
+use Twig\Error\RuntimeError;
 
 final class ParameterAdminController extends CRUDController
 {
+
+    public function __construct(private Environment $twig, private Filesystem $filesystem) { }
 
     /**
      * Edit action.
      *
      * @param Request $request
      * @return Response
-     * @throws \Sonata\AdminBundle\Exception\ModelManagerThrowable
-     * @throws \Twig\Error\RuntimeError
+     * @throws ModelManagerThrowable
+     * @throws RuntimeError
      */
     public function editAction(Request $request): Response // NEXT_MAJOR: Remove the unused $id parameter
     {
@@ -98,7 +104,7 @@ final class ParameterAdminController extends CRUDController
                     if ($file) {
                         // clean old file
                         try {
-                            $this->get('filesystem')->remove(
+                            $this->filesystem->remove(
                                 $this->getParameter(
                                     $submittedObject->getCode().'_directory'
                                 ).DIRECTORY_SEPARATOR.$submittedObject->getValue()
@@ -199,8 +205,7 @@ final class ParameterAdminController extends CRUDController
         $formView = $form->createView();
 
         // set the theme for the current Admin Form
-        $twig = $this->get('twig');
-        $twig->getRuntime(FormRenderer::class)->setTheme($formView, $this->admin->getFormTheme());
+        $this->twig->getRuntime(FormRenderer::class)->setTheme($formView, $this->admin->getFormTheme());
 
         $template = $this->admin->getTemplateRegistry()->getTemplate($templateKey);
 
