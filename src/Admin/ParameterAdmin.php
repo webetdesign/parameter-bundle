@@ -30,15 +30,12 @@ final class ParameterAdmin extends AbstractAdmin
     protected array $types = [];
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private ParameterBagInterface $parameterBag,
-        ?string $code = null,
-        ?string $class = null,
-        ?string $baseControllerName = null,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly ParameterBagInterface $parameterBag,
     )
     {
         $this->types = $this->parameterBag->get('parameter.fixtures');
-        parent::__construct($code, $class, $baseControllerName);
+        parent::__construct();
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
