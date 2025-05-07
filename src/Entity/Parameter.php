@@ -107,7 +107,7 @@ class Parameter
 
     public function setValue($value): self
     {
-        $this->value = $this->type === 'boolean' ? intval($value) : $value;
+        $this->value = $this->type === 'boolean' ? (string) intval($value) : $value;
 
         return $this;
     }
