@@ -15,7 +15,7 @@ class FixtureCommand extends Command
 
     private ParameterManagerInterface $manager;
 
-    public function __construct(ParameterManagerInterface $manager, string $name = null, $parameterFixtures = [])
+    public function __construct(ParameterManagerInterface $manager, ?string $name = null, $parameterFixtures = [])
     {
         parent::__construct($name);
         $this->manager           = $manager;

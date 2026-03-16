@@ -56,7 +56,7 @@ final class ParameterAdminController extends CRUDController
         $templateKey = 'edit';
 
         $request        = $this->admin->getRequest();
-        $id             = $request->get($this->admin->getIdParameter());
+        $id             = $request->attributes->get($this->admin->getIdParameter());
         $existingObject = $this->admin->getObject($id);
 
         if (!$existingObject) {
