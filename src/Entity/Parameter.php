@@ -5,7 +5,6 @@ namespace WebEtDesign\ParameterBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\HttpFoundation\File\File;
 use WebEtDesign\ParameterBundle\Doctrine\ParameterRepository;
 
